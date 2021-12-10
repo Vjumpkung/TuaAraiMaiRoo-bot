@@ -5,11 +5,11 @@ import discord
 import discord_slash
 from discord_slash import SlashCommand
 from discord_slash.model import SlashCommandOptionType
-from src.utils.guilddata import *
+from src.utils.returns import *
 from src.utils.kick import random_kick
 from src.utils.travel import random_travel
 from src.utils.command import SlashChoice
-from src.format.code import send_fmc
+# from src.format.code import send_fmc
 # from src.server.Server import ku_verify, ku_info
 from src.poker.poker import poker_play
 from src.pog.pog import pog_play
@@ -30,7 +30,7 @@ bot = TuanAraiMaiRoo()
 slash = SlashCommand(bot, sync_commands=True)
 
 
-ADMIN_ID = 186315352026644480
+ADMIN_ID = 250567674504019968
 GUILD_IDS = None
 
 
@@ -44,43 +44,20 @@ async def on_ready():
     me = await bot.fetch_user(ADMIN_ID)
     await me.send(f"Running {bot.user.name} on\n{platform.uname()}")
 
-
-@bot.event
-async def on_guild_join(guild):
-    global GuildData
-    global GuildIDs
-    if guild.id not in GuildIDs:
-        addGuild(guild.id)
-        print(f'added {guild.id} to guild db')
-        from src.utils.guilddata import GuildData, GuildIDs
-
-
 @bot.event
 async def on_message(msg: discord.Message):
     global GuildData, GuildIDs
     if msg.author.bot:
         return
     try:
-        if msg.guild.id not in GuildIDs:
-            addGuild(msg.guild.id)
-            print(f'added {msg.guild.id} to guild db')
-            from src.utils.guilddata import GuildData, GuildIDs
-
         channel = msg.channel
-        guilddata = GuildData(msg.guild.id)
-
-        if channel.id in guilddata.codechannel_ids:
-            language = guilddata.channeldata(channel.id)['lang']
-
-            if msg.content[0] in ['_', '*', '`', ' ']:
-                return
-
-            await send_fmc(msg, language)
-
-            await msg.delete()
-            return
-        elif msg.content in guilddata.return_msg:
-            await channel.send(guilddata.return_msg[msg.content])
+        print(msg.content,str(msg.guild.id))
+        #read return_msg.json
+        with open("src/utils/lazydb/return_msg.json", "r+") as f:
+            json_data = json.load(f)
+            # print(json_data)
+        if msg.content in json_data[str(msg.guild.id)].keys():
+            await channel.send(json_data[str(msg.guild.id)][msg.content])
             return
     except:
         pass
@@ -230,38 +207,6 @@ async def travel_chanel(ctx: discord_slash.SlashContext, user: discord.Member = 
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_travel(bot, ctx, user)
 
-
-@slash.subcommand(base='codechannel', name='add', description='Add auto text formatting to a text channel.', guild_ids=GUILD_IDS,
-                  options=[create_option(name='channel', description='The channel you want to add text formatting to.',
-                                         option_type=SlashCommandOptionType.CHANNEL, required=True),
-                           create_option(name='language', description='The programming language for text formatting on this channel.',
-                                         option_type=SlashCommandOptionType.STRING, required=True,
-                                         choices=SlashChoice.programmingLanguageChoice)])
-async def _codechannel_add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, language: str):
-    await AddCodeChannel(ctx, channel, language)
-
-
-@slash.subcommand(base='codechannel', name='remove', description='Add auto text formatting to a text channel.', guild_ids=GUILD_IDS,
-                  options=[create_option(name='channel', description='The channel you want to remove text formatting from.',
-                                           option_type=SlashCommandOptionType.CHANNEL, required=True,)])
-async def _codechannel_remove(ctx: discord_slash.SlashContext, channel: discord.TextChannel):
-    await RemoveCodeChannel(ctx, channel)
-
-
-@slash.subcommand(base='codechannel', name='list', description='list all code channel in this server.', guild_ids=GUILD_IDS)
-async def _codechannel_check(ctx: discord_slash.SlashContext):
-    await ListCodeChannel(ctx)
-
-
-@slash.subcommand(base='codechannel', subcommand_group='permission', name='managemessage', description='Set Manage Messages permission of a/all code channel(s).', guild_ids=GUILD_IDS,
-                  options=[create_option(name='channel', description='Choose a code channel| All code channels.',
-                                         option_type=SlashCommandOptionType.CHANNEL, required=True),
-                           create_option(name='manageable', description='manageable or not.',
-                                         option_type=SlashCommandOptionType.BOOLEAN, required=True)])
-async def _codechannel_permission_managemessage(ctx: discord_slash.SlashContext, channel: discord.TextChannel, manageable: bool):
-    await Permission.ManageMessage(ctx, manageable, channel)
-
-
 @slash.subcommand(base='return', name='add', description='Add return messages. (Teach the bot.)', guild_ids=GUILD_IDS,
                   options=[create_option(name='message', description='-',
                                          option_type=SlashCommandOptionType.STRING, required=True),
@@ -276,18 +221,6 @@ async def _returnmsg_add(ctx: discord_slash.SlashContext, message: str, return_m
                                          option_type=SlashCommandOptionType.STRING, required=True)])
 async def _returnmsg_add(ctx: discord_slash.SlashContext, message: str):
     await RemoveReturnMsg(ctx, message)
-
-
-# @slash.slash(name='verify', description='Verifies that you are a true KU student', guild_ids=[847172394316464178, 440532168389689345])
-# async def _verify(ctx: discord_slash.SlashContext):
-#     await ctx.send(f"Verify is dead. It's Nath Prachayakul's fault")
-
-
-# @slash.slash(name='info', description='Shows KU info of a user.', guild_ids=GUILD_IDS)
-# async def _info(ctx: discord_slash.SlashContext, user: discord.Member = None):
-#     msg = await ctx.send('Processing..')
-#     await msg.edit(content="", embed=ku_info(ctx, user))
-
 
 @slash.subcommand(base='math', name='solve', description='Solve an equation.', guild_ids=GUILD_IDS,
                   options=[create_option(name='equation', description='The equation you want to solve. (If possible, move the expression after (=) aside)',
