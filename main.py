@@ -54,7 +54,7 @@ async def on_message(msg: discord.Message):
         channel = msg.channel
         # print(msg.content,str(msg.guild.id))
         #read return_msg.json
-        with open("src/utils/lazydb/return_msg.json", "r+") as f:
+        with open("lazydb/return_msg.json", "r+") as f:
             json_data = json.load(f)
             # print(json_data)
         if msg.content in json_data[str(msg.guild.id)].keys():
