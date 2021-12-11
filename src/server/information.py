@@ -1,7 +1,4 @@
-from inspect import formatargspec
-import discord
 from discord_slash import SlashContext
-from discord.utils import get
 from discord import Embed
 from bs4 import BeautifulSoup
 import requests
@@ -33,7 +30,7 @@ def ku_info(ctx: SlashContext,kuid: str):
         return em
     else:
         user_data = data
-        with open("src/server/verified_db/verified.json", "r" ,encoding='utf8') as f:
+        with open("lazydb/verified.json", "r" ,encoding='utf8') as f:
             verified_data = json.load(f)
         nick = ""
         for i in verified_data:

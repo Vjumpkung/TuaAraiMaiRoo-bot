@@ -10,8 +10,6 @@ from src.utils.returns import *
 from src.utils.kick import random_kick
 from src.utils.travel import random_travel
 from src.utils.command import SlashChoice
-# from src.format.code import send_fmc
-# from src.server.Server import ku_verify, ku_info
 from src.poker.poker import poker_play
 from src.pog.pog import pog_play
 from src.games import rockpaperscissors
@@ -39,9 +37,6 @@ GUILD_IDS = None
 async def on_ready():
     global GUILD_IDS
     print(datetime.now())
-    GUILD_IDS = [guild.id for guild in bot.guilds]
-    GUILD_NAMES = [guild.name for guild in bot.guilds]
-    print(GUILD_NAMES)
     me = await bot.fetch_user(ADMIN_ID)
     await me.send(f"Running {bot.user.name} on\n{platform.uname()}")
 
@@ -52,11 +47,8 @@ async def on_message(msg: discord.Message):
         return
     try:
         channel = msg.channel
-        # print(msg.content,str(msg.guild.id))
-        #read return_msg.json
         with open("lazydb/return_msg.json", "r+") as f:
             json_data = json.load(f)
-            # print(json_data)
         if msg.content in json_data[str(msg.guild.id)].keys():
             await channel.send(json_data[str(msg.guild.id)][msg.content])
             return
@@ -64,7 +56,7 @@ async def on_message(msg: discord.Message):
         pass
 
 
-@slash.slash(name="hello", description="Say hi to the bot. Mo  used to check if bot is ready.")
+@slash.slash(name="hello", description="Say hi to the bot. Mo used to check if bot is ready.")
 async def nine_nine(ctx: discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await ctx.send("HI :flushed:")
@@ -236,6 +228,7 @@ async def _math_solve(ctx: discord_slash.SlashContext, equation: str, variable: 
 
 @slash.slash(name='kuinfo', description='Shows KU info of a user.' , options=[create_option(name='kuid', description='รหัสนิสิต',option_type=SlashCommandOptionType.STRING, required=True)])
 async def _info(ctx: discord_slash.SlashContext,kuid: str):
-    await ctx.send(embed=ku_info(ctx,kuid))
-# discord_slash.utils.manage_commands.remove_all_commands_in(918900867556577291, vars.TOKEN, guild_id=None)
+    wait = await ctx.send("processing...")
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await wait.edit(content="",embed=ku_info(ctx,kuid))
 bot.run(vars.TOKEN)
