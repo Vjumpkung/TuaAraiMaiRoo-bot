@@ -1,8 +1,9 @@
-# https://discord.com/api/oauth2/authorize?client_id=864797655443308564&permissions=8&scope=applications.commands%20bot
+from discord import embeds
 from bot import TuanAraiMaiRoo
 
 import discord
 import discord_slash
+from src.server.information import ku_info
 from discord_slash import SlashCommand
 from discord_slash.model import SlashCommandOptionType
 from src.utils.returns import *
@@ -51,7 +52,7 @@ async def on_message(msg: discord.Message):
         return
     try:
         channel = msg.channel
-        print(msg.content,str(msg.guild.id))
+        # print(msg.content,str(msg.guild.id))
         #read return_msg.json
         with open("src/utils/lazydb/return_msg.json", "r+") as f:
             json_data = json.load(f)
@@ -63,44 +64,44 @@ async def on_message(msg: discord.Message):
         pass
 
 
-@slash.slash(name="hello", description="Say hi to the bot. Mo  used to check if bot is ready.", guild_ids=GUILD_IDS)
+@slash.slash(name="hello", description="Say hi to the bot. Mo  used to check if bot is ready.")
 async def nine_nine(ctx: discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await ctx.send("HI :flushed:")
 
 
-@slash.slash(name='invitebot', description='I will send you the authorization link, see you in your server.', guild_ids=GUILD_IDS)
+@slash.slash(name='invitebot', description='I will send you the authorization link, see you in your server.')
 async def send_botinvitelink(ctx: discord_slash.SlashContext):
-    await ctx.send('https://tinyurl.com/blackhole112')
+    await ctx.send('https://tinyurl.com/purplemairoo')
 
 
-@slash.subcommand(base='game', name="poker", description="Plays Poker.", guild_ids=GUILD_IDS)
+@slash.subcommand(base='game', name="poker", description="Plays Poker.")
 async def _poker(ctx: discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await poker_play(bot, ctx)
 
 
-@slash.subcommand(base='game', name="pokdeng", description="Plays Pok Deng.", guild_ids=GUILD_IDS)
+@slash.subcommand(base='game', name="pokdeng", description="Plays Pok Deng.")
 async def _pog(ctx: discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await pog_play(bot, ctx)
 
 
 @slash.subcommand(base='game', subcommand_group='rockpaperscissors', name='singleplayer',
-                  description='Play Rock Paper Scissors with bot.', guild_ids=GUILD_IDS)
+                  description='Play Rock Paper Scissors with bot.')
 async def _rockpaperscissors(ctx: discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await rockpaperscissors.RockPaperScissors.PlaySP(bot, ctx)
 
 
 @slash.subcommand(base='game', subcommand_group='rockpaperscissors', name='multiplayer',
-                  description='Play Rock Paper Scissors with friends.', guild_ids=GUILD_IDS)
+                  description='Play Rock Paper Scissors with friends.')
 async def _rockpaperscissors(ctx: discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await rockpaperscissors.RockPaperScissors.PlayMP(bot, ctx)
 
 
-@slash.slash(name="say", description="Say some thing(Text to speech)", guild_ids=GUILD_IDS,
+@slash.slash(name="say", description="Say some thing(Text to speech)",
              options=[create_option(name='message',
                                     description='The sound to play or the text for TTS',
                                     option_type=SlashCommandOptionType.STRING, required=True),
@@ -114,7 +115,7 @@ async def audio_say(ctx: discord_slash.SlashContext, message, language=None):
     await say(bot, ctx, message, language)
 
 
-@slash.slash(name="play", description="Play a sound", guild_ids=GUILD_IDS,
+@slash.slash(name="play", description="Play a sound",
              options=[create_option(name='sound',
                                     description='Choose a sound to play.',
                                     option_type=SlashCommandOptionType.STRING, required=True,
@@ -124,7 +125,7 @@ async def audio_play(ctx: discord_slash.SlashContext, sound):
     await play(bot, ctx, sound)
 
 
-@slash.slash(name="tu", description="ตู่", guild_ids=GUILD_IDS,
+@slash.slash(name="tu", description="ตู่",
              options=[create_option(name='sound',
                                     description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                     option_type=SlashCommandOptionType.STRING, required=True,
@@ -134,7 +135,7 @@ async def audio_play(ctx: discord_slash.SlashContext, sound):
     await play(bot, ctx, sound, political=True)
 
 
-@slash.slash(name="pom", description="ป้อม", guild_ids=GUILD_IDS,
+@slash.slash(name="pom", description="ป้อม",
              options=[create_option(name='sound',
                                     description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                     option_type=SlashCommandOptionType.STRING, required=True,
@@ -144,7 +145,7 @@ async def audio_play(ctx: discord_slash.SlashContext, sound):
     await play(bot, ctx, sound, political=True)
 
 
-@slash.subcommand(base='oneonetwo', name="o", description="112", guild_ids=GUILD_IDS,
+@slash.subcommand(base='oneonetwo', name="o", description="112",
                   options=[create_option(name='sound',
                                          description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                          option_type=SlashCommandOptionType.STRING, required=True,
@@ -154,7 +155,7 @@ async def audio_play(ctx: discord_slash.SlashContext, sound):
     await play(bot, ctx, sound, political=True)
 
 
-@slash.subcommand(base='oneonetwo', name="nui", description="112", guild_ids=GUILD_IDS,
+@slash.subcommand(base='oneonetwo', name="nui", description="112",
                   options=[create_option(name='sound',
                                          description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                          option_type=SlashCommandOptionType.STRING, required=True,
@@ -164,7 +165,7 @@ async def audio_play(ctx: discord_slash.SlashContext, sound):
     await play(bot, ctx, sound, political=True)
 
 
-@slash.subcommand(base='oneonetwo', name="pui", description="112", guild_ids=GUILD_IDS,
+@slash.subcommand(base='oneonetwo', name="pui", description="112",
                   options=[create_option(name='sound',
                                          description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                          option_type=SlashCommandOptionType.STRING, required=True,
@@ -174,7 +175,7 @@ async def audio_play(ctx: discord_slash.SlashContext, sound):
     await play(bot, ctx, sound, political=True)
 
 
-@slash.slash(name='n', description='Play N Sound for user [Warning! This sound can hurt your ears].', guild_ids=GUILD_IDS,
+@slash.slash(name='n', description='Play N Sound for user [Warning! This sound can hurt your ears].',
              options=[create_option(name='sound',
                                     description='Select Sound To play',
                                     option_type=SlashCommandOptionType.STRING, required=True,
@@ -184,30 +185,30 @@ async def audio_play(ctx: discord_slash.SlashContext, sound: str):
     await play(bot, ctx, sound)
 
 
-@slash.slash(name='slap', description='Slap.', guild_ids=GUILD_IDS)
+@slash.slash(name='slap', description='Slap.')
 async def audio_play(ctx: discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, 'slap')
 
 
-@slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel", guild_ids=GUILD_IDS)
+@slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel")
 async def audio_disconnect(ctx: discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await disconnect(bot, ctx)
 
 
-@slash.slash(name="snap", description="Perfectly balanced, as all things should be", guild_ids=GUILD_IDS)
+@slash.slash(name="snap", description="Perfectly balanced, as all things should be")
 async def snap_kick(ctx: discord_slash.SlashContext, user: discord.Member = None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_kick(bot, ctx, user)
 
 
-@slash.slash(name='travel', description="Travel to all of the Voice Channel.", guild_ids=GUILD_IDS)
+@slash.slash(name='travel', description="Travel to all of the Voice Channel.")
 async def travel_chanel(ctx: discord_slash.SlashContext, user: discord.Member = None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_travel(bot, ctx, user)
 
-@slash.subcommand(base='return', name='add', description='Add return messages. (Teach the bot.)', guild_ids=GUILD_IDS,
+@slash.subcommand(base='return', name='add', description='Add return messages. (Teach the bot.)',
                   options=[create_option(name='message', description='-',
                                          option_type=SlashCommandOptionType.STRING, required=True),
                            create_option(name='return_message', description='The message that you want the bot to say in return.',
@@ -216,13 +217,13 @@ async def _returnmsg_add(ctx: discord_slash.SlashContext, message: str, return_m
     await AddReturnMsg(ctx, message, return_message)
 
 
-@slash.subcommand(base='return', name='remove', description="Remove return messages. (Delete the bot's memory.)", guild_ids=GUILD_IDS,
+@slash.subcommand(base='return', name='remove', description="Remove return messages. (Delete the bot's memory.)",
                   options=[create_option(name='message', description='The message that you want to delete.',
                                          option_type=SlashCommandOptionType.STRING, required=True)])
 async def _returnmsg_add(ctx: discord_slash.SlashContext, message: str):
     await RemoveReturnMsg(ctx, message)
 
-@slash.subcommand(base='math', name='solve', description='Solve an equation.', guild_ids=GUILD_IDS,
+@slash.subcommand(base='math', name='solve', description='Solve an equation.',
                   options=[create_option(name='equation', description='The equation you want to solve. (If possible, move the expression after (=) aside)',
                                          option_type=SlashCommandOptionType.STRING, required=True),
                            create_option(name='variable', description='The variable you want to solve for.',
@@ -233,5 +234,8 @@ async def _returnmsg_add(ctx: discord_slash.SlashContext, message: str):
 async def _math_solve(ctx: discord_slash.SlashContext, equation: str, variable: str = None, color: str = "White"):
     await solve_eq(ctx, equation, variable, color)
 
-
+@slash.slash(name='kuinfo', description='Shows KU info of a user.' , options=[create_option(name='kuid', description='รหัสนิสิต',option_type=SlashCommandOptionType.STRING, required=True)])
+async def _info(ctx: discord_slash.SlashContext,kuid: str):
+    await ctx.send(embed=ku_info(ctx,kuid))
+# discord_slash.utils.manage_commands.remove_all_commands_in(918900867556577291, vars.TOKEN, guild_id=None)
 bot.run(vars.TOKEN)

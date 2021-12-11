@@ -1,14 +1,11 @@
-<img width="200" height="200" align="left" style="float: left; margin: 0 10px 0 0;" alt="Atlanta" src="https://cdn.discordapp.com/avatars/570544162555035658/54af40f5b4815fa1961836f280b72452.png">
+<img width="200" height="200" align="left" style="float: left; margin: 0 10px 0 0;" alt="Atlanta" src="https://cdn.discordapp.com/avatars/918159563453267978/8baa766422bd1f2246c2b260adc497e2.webp">
 
-# ตัวอะไรไม่รู้
+# ตัวอะไรไม่รู้ but สีม่วง
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&logo=GNU)](https://www.gnu.org/licenses/gpl-3.0)  
-[![AWS EC2](https://img.shields.io/badge/-ec2-orange?style=flat-square&logo=amazonaws)](https://aws.amazon.com/ec2/)
-[![AWS DynamoDB](https://img.shields.io/badge/-dynamodb-orange?style=flat-square&logo=amazonaws)](https://aws.amazon.com/dynamodb/)  
-[![AWS CodePipeline](https://img.shields.io/badge/-codepipeline-orange?style=flat-square&logo=amazonaws)](https://aws.amazon.com/codepipeline/)  
 [![discord.py](https://img.shields.io/badge/discord.py-1.7.3-white?style=flat-square&logo=python&logoColor=white&labelColor=376F9E&color=FDD043)](https://github.com/Rapptz/discord.py)
 
-This bot is called ตัวอะไรไม่รู้ (Tạw xarị mị̀rū̂). It is originally created for KU CPE35 Server.
+This bot is called ตัวอะไรไม่รู้ but สีม่วง (Tua Arai Mairoo but See Muang). It is originally created for KU CPE35 & ไอแอมเจนนารอล Server.
 
 <h2>Commands</h2>
 
@@ -18,17 +15,12 @@ Every command is called by / (slash).
 
 > /hello
 
-<h3>CPE35 Server Only</h3>
+<h3>All server</h3>
 
 | Command | Description                                                                             |
 | ------- | --------------------------------------------------------------------------------------- |
-| <s>verify</s>  | <s>Verifies that you are a true KU student and gives you a role. (Special for CPE student)</s> |
-| <s>info</s>   | <s>Show KU info of a verified discord user</s>                                            |
-
-<h3>All server</h3>
-
+| kuinfo   | Show KU info of a CPE student by ku-id                                    |
 | Command                | Description                                                        |
-| ---------------------- | ------------------------------------------------------------------ |
 | hello                  | Says Hi :flushed:                                                  |
 | invitebot              | Sends ตัวอะไรไม่รู้'s invitation link                              |
 | codechannel add        | Adds a code channel                                                |
@@ -55,4 +47,4 @@ Every command is called by / (slash).
 
 ## License
 
-ตัวอะไรไม่รู้ is licensed under the GPL 3.0 license. See the file `LICENSE` for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
+ตัวอะไรไม่รู้ but สีม่วง is licensed under the GPL 3.0 license. See the file `LICENSE` for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
