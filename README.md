@@ -20,7 +20,6 @@ Every command is called by / (slash).
 | Command | Description                                                                             |
 | ------- | --------------------------------------------------------------------------------------- |
 | kuinfo   | Show KU info of a CPE student by ku-id                                    |
-| Command                | Description                                                        |
 | hello                  | Says Hi :flushed:                                                  |
 | invitebot              | Sends ตัวอะไรไม่รู้'s invitation link                              |
 | codechannel add        | Adds a code channel                                                |
