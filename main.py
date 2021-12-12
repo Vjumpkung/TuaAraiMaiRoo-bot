@@ -1,6 +1,5 @@
-from discord import embeds
 from bot import TuanAraiMaiRoo
-
+from src.utils.codechannel import AddCodeChannel,send_fmc,remove_channel
 import discord
 import discord_slash
 from src.server.information import ku_info
@@ -13,10 +12,8 @@ from src.utils.command import SlashChoice
 from src.poker.poker import poker_play
 from src.pog.pog import pog_play
 from src.games import rockpaperscissors
-from src.maths.maths import solve_eq
 from src.audio.audio import say, play, disconnect
 from discord_slash.utils.manage_commands import create_option, create_choice
-from src.utils.member import getNick
 from src.utils.env import vars
 import pkg_resources
 
@@ -29,28 +26,35 @@ bot = TuanAraiMaiRoo()
 slash = SlashCommand(bot, sync_commands=True)
 
 
-ADMIN_ID = 250567674504019968
-GUILD_IDS = None
+ADMIN_ID = int(vars.ADMIN)
 
 
 @bot.event
 async def on_ready():
-    global GUILD_IDS
+    # discord_slash.utils.manage_commands.remove_all_commands(918900867556577291,vars.TOKEN)
     print(datetime.now())
     me = await bot.fetch_user(ADMIN_ID)
     await me.send(f"Running {bot.user.name} on\n{platform.uname()}")
 
 @bot.event
 async def on_message(msg: discord.Message):
-    global GuildData, GuildIDs
     if msg.author.bot:
         return
     try:
         channel = msg.channel
         with open("lazydb/return_msg.json", "r+") as f:
             json_data = json.load(f)
+        with open(file="lazydb/code_db.json",mode="r+",encoding="utf8") as g:
+            code_db = json.load(g)
         if msg.content in json_data[str(msg.guild.id)].keys():
             await channel.send(json_data[str(msg.guild.id)][msg.content])
+            return
+        if str(msg.guild.id) in code_db.keys():
+            programming_language = code_db[str(msg.guild.id)]['codechannel_ids'][str(channel.id)]["lang"]
+            if msg.content[0] in ['_', '*', '`', ' ']:
+                return
+            await send_fmc(msg, programming_language)
+            await msg.delete()
             return
     except:
         pass
@@ -200,6 +204,7 @@ async def travel_chanel(ctx: discord_slash.SlashContext, user: discord.Member = 
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_travel(bot, ctx, user)
 
+
 @slash.subcommand(base='return', name='add', description='Add return messages. (Teach the bot.)',
                   options=[create_option(name='message', description='-',
                                          option_type=SlashCommandOptionType.STRING, required=True),
@@ -207,28 +212,31 @@ async def travel_chanel(ctx: discord_slash.SlashContext, user: discord.Member = 
                                          option_type=SlashCommandOptionType.STRING, required=True)])
 async def _returnmsg_add(ctx: discord_slash.SlashContext, message: str, return_message: str):
     await AddReturnMsg(ctx, message, return_message)
-
-
+    
+    
 @slash.subcommand(base='return', name='remove', description="Remove return messages. (Delete the bot's memory.)",
                   options=[create_option(name='message', description='The message that you want to delete.',
                                          option_type=SlashCommandOptionType.STRING, required=True)])
 async def _returnmsg_add(ctx: discord_slash.SlashContext, message: str):
     await RemoveReturnMsg(ctx, message)
 
-@slash.subcommand(base='math', name='solve', description='Solve an equation.',
-                  options=[create_option(name='equation', description='The equation you want to solve. (If possible, move the expression after (=) aside)',
-                                         option_type=SlashCommandOptionType.STRING, required=True),
-                           create_option(name='variable', description='The variable you want to solve for.',
-                                         option_type=SlashCommandOptionType.STRING, required=False),
-                           create_option(name='foregroundcolor', description='Foreground Color.',
-                                         option_type=SlashCommandOptionType.STRING, required=False,
-                                         choices=[create_choice("White", "White"), create_choice("Black", "Black")])])
-async def _math_solve(ctx: discord_slash.SlashContext, equation: str, variable: str = None, color: str = "White"):
-    await solve_eq(ctx, equation, variable, color)
 
 @slash.slash(name='kuinfo', description='Shows KU info of a user.' , options=[create_option(name='kuid', description='รหัสนิสิต',option_type=SlashCommandOptionType.STRING, required=True)])
 async def _info(ctx: discord_slash.SlashContext,kuid: str):
     wait = await ctx.send("processing...")
     print(f'{str(ctx.author)} used {ctx.name}')
     await wait.edit(content="",embed=ku_info(ctx,kuid))
+    
+
+@slash.slash(name="codechannel_add", description="create automatic code formatting." , 
+             options=[
+                 create_option(name="lang",description="Your programming language",option_type=SlashCommandOptionType.STRING,required=True)
+            ])
+async def _createcode(ctx: discord_slash.SlashContext,lang: str):
+    await AddCodeChannel(ctx,ctx.channel,language=lang)
+    
+@slash.slash(name="codechannel_delete", description="remove automatic code formatting.")
+async def _deletecode(ctx: discord_slash.SlashContext):
+    await remove_channel(ctx)
+    
 bot.run(vars.TOKEN)
