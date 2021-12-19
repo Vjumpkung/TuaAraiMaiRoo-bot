@@ -34,6 +34,8 @@ async def voice(bot, ctx, msg, language=None, ):
 
 
 async def say(bot, ctx, msg, language=None, travel=False):
+    #send message for waiting some process completed.
+    wc = await ctx.send("processing...")
 
     try:
         isBotCommand = ctx.message.startswith('$')
@@ -58,8 +60,8 @@ async def say(bot, ctx, msg, language=None, travel=False):
         return
 
     returnMessage = f'{getNick(ctx.author)}: {msg}'
-
-    return await ctx.send(returnMessage)
+    
+    return await wc.edit(content=returnMessage)
 
 
 async def play(bot, ctx, sound, political=False):
