@@ -1,4 +1,5 @@
 from discord import FFmpegPCMAudio, Embed
+from discord_slash import context
 from src.utils.vc import joinVoiceChannel, leaveVoiceChannel, get_PATH_ffmpeg
 from src.utils.member import getNick
 from src.utils.config import CONFIG, MP3_files
@@ -57,7 +58,8 @@ async def say(bot, ctx, msg, language=None, travel=False):
     await repeat(vc, text=msg, lang=language)
 
     if travel is True:
-        return
+        welcome_back = f'{msg}'
+        return await wc.edit(content=welcome_back)
 
     returnMessage = f'{getNick(ctx.author)}: {msg}'
     
