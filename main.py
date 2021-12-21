@@ -1,5 +1,6 @@
 from bot import TuanAraiMaiRoo
-from src.utils.codechannel import AddCodeChannel,send_fmc,remove_channel
+from src.format.code import send_fmc
+from src.utils.codechannel import AddCodeChannel,remove_channel
 import discord
 import discord_slash
 from src.server.information import ku_info
@@ -13,7 +14,7 @@ from src.poker.poker import poker_play
 from src.pog.pog import pog_play
 from src.games import rockpaperscissors
 from src.audio.audio import say, play, disconnect
-from discord_slash.utils.manage_commands import create_option, create_choice
+from discord_slash.utils.manage_commands import create_option
 from src.utils.env import vars
 import pkg_resources
 
@@ -31,7 +32,7 @@ ADMIN_ID = int(vars.ADMIN)
 
 @bot.event
 async def on_ready():
-    # discord_slash.utils.manage_commands.remove_all_commands(918900867556577291,vars.TOKEN)
+    print(f"{bot.user.name} is running now.")
     print(datetime.now())
     me = await bot.fetch_user(ADMIN_ID)
     await me.send(f"Running {bot.user.name} on\n{platform.uname()}")
@@ -193,7 +194,8 @@ async def audio_disconnect(ctx: discord_slash.SlashContext):
     await disconnect(bot, ctx)
 
 
-@slash.slash(name="snap", description="Perfectly balanced, as all things should be")
+@slash.slash(name="snap", description="Perfectly balanced, as all things should be"
+                        , options=[create_option(name="user",description="50% chance to kick that user or not.",option_type=SlashCommandOptionType.USER,required=True)])
 async def snap_kick(ctx: discord_slash.SlashContext, user: discord.Member = None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_kick(bot, ctx, user)
@@ -238,5 +240,5 @@ async def _createcode(ctx: discord_slash.SlashContext,lang: str):
 @slash.slash(name="codechannel_delete", description="remove automatic code formatting.")
 async def _deletecode(ctx: discord_slash.SlashContext):
     await remove_channel(ctx)
-    
+
 bot.run(vars.TOKEN)

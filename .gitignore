@@ -9,3 +9,4 @@ gcp_client.json
 push*
 *.ipynb
 lazydb
+*.pyc

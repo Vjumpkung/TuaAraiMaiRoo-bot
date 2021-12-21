@@ -2,8 +2,6 @@ import discord_slash
 import json
 
 async def AddReturnMsg(ctx: discord_slash.SlashContext, message: str, return_message: str):
-    # guilddata.return_msg.update({message: return_message})
-    # guilddata.data['return_msg'] = guilddata.return_msg
     await ctx.send(f"`{message} -> {return_message}`")
     with open("lazydb/return_msg.json", 'r+', encoding='utf-8') as f:
         json_read = json.load(f)
@@ -13,7 +11,7 @@ async def AddReturnMsg(ctx: discord_slash.SlashContext, message: str, return_mes
         json_read[str_guild][message] = return_message
         #write to file
         f.seek(0)
-        print(json_read)
+        print(f"`{message} -> {return_message}`")
         json.dump(json_read, f, indent=4)
         f.truncate()
 
@@ -27,7 +25,7 @@ async def RemoveReturnMsg(ctx: discord_slash.SlashContext, message: str):
         json_read[str(ctx.guild.id)].pop(message, None)
         #write to file
         f.seek(0)
-        print(json_read)
+        print(f"Removed `{message}:{return_message}`")
         json.dump(json_read, f, indent=4)
         f.truncate()
     await ctx.send(f"Removed `{message}:{return_message}`")

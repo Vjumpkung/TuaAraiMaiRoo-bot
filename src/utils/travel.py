@@ -2,7 +2,6 @@ from random import randint
 from src.audio.audio import say
 from src.utils.member import getNick
 import time
-import discord
 
 
 async def random_travel(bot, ctx, user):
